@@ -1,0 +1,11 @@
+culturas = []
+areas = []
+produtos = []
+quantidades_m2 = []
+unidades_m2 = []
+ruas_lavoura = []
+litros_por_rua = []
+
+bases = []
+alturas = []
+raios = []
