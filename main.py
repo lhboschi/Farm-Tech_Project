@@ -1,3 +1,5 @@
+import tkinter as tk
+from tkinter import messagebox
 import math
 
 culturas = []
@@ -5,102 +7,67 @@ areas = []
 produtos = []
 quantidades = []
 
-def calcular_area(cultura):
+def calcular_area():
+    cultura = cultura_var.get()
     if cultura == "Milho":
-        base = float(input("Base: "))
-        altura = float(input("Altura: "))
-        return base * altura
-    else:
-        raio = float(input("Raio: "))
-        return math.pi * raio ** 2
+        return float(entry1.get()) * float(entry2.get())
+    return math.pi * float(entry1.get()) ** 2
 
 def cadastrar():
-    print("1 - Milho")
-    print("2 - Café")
-    op = input("Escolha: ")
+    try:
+        cultura = cultura_var.get()
+        area = calcular_area()
+        produto = entry_produto.get()
+        qtd = float(entry_qtd.get())
 
-    if op == "1":
-        cultura = "Milho"
-    elif op == "2":
-        cultura = "Café"
-    else:
-        print("Opção inválida")
-        return
+        culturas.append(cultura)
+        areas.append(area)
+        produtos.append(produto)
+        quantidades.append(qtd)
 
-    area = calcular_area(cultura)
-    produto = input("Produto: ")
-    qtd = float(input("Quantidade por m²: "))
-
-    culturas.append(cultura)
-    areas.append(area)
-    produtos.append(produto)
-    quantidades.append(qtd)
+        listar()
+    except:
+        messagebox.showerror("Erro", "Preencha os campos corretamente")
 
 def listar():
-    if not culturas:
-        print("Nenhum registro")
-        return
-
+    texto.delete("1.0", tk.END)
     for i in range(len(culturas)):
         total = areas[i] * quantidades[i]
-        print(f"\nRegistro: {i}")
-        print(f"Cultura: {culturas[i]}")
-        print(f"Área: {areas[i]:.2f}")
-        print(f"Produto: {produtos[i]}")
-        print(f"Qtd por m²: {quantidades[i]:.2f}")
-        print(f"Total por área: {total:.2f}")
+        texto.insert(tk.END, f"Registro: {i}\n")
+        texto.insert(tk.END, f"Cultura: {culturas[i]}\n")
+        texto.insert(tk.END, f"Área: {areas[i]:.2f}\n")
+        texto.insert(tk.END, f"Produto: {produtos[i]}\n")
+        texto.insert(tk.END, f"Total: {total:.2f}\n")
+        texto.insert(tk.END, "-" * 30 + "\n")
 
-def atualizar():
-    listar()
-    i = int(input("Registro para atualizar: "))
-    if i < 0 or i >= len(culturas):
-        print("Registro inválido")
-        return
+janela = tk.Tk()
+janela.title("FarmTech")
+janela.geometry("700x500")
 
-    print("1 - Milho")
-    print("2 - Café")
-    op = input("Escolha: ")
+cultura_var = tk.StringVar(value="Milho")
 
-    if op == "1":
-        cultura = "Milho"
-    elif op == "2":
-        cultura = "Café"
-    else:
-        print("Opção inválida")
-        return
+tk.Label(janela, text="Cultura").pack()
+tk.OptionMenu(janela, cultura_var, "Milho", "Café").pack()
 
-    area = calcular_area(cultura)
-    produto = input("Produto: ")
-    qtd = float(input("Quantidade por m²: "))
+tk.Label(janela, text="Base/Raio").pack()
+entry1 = tk.Entry(janela)
+entry1.pack()
 
-    culturas[i] = cultura
-    areas[i] = area
-    produtos[i] = produto
-    quantidades[i] = qtd
+tk.Label(janela, text="Altura").pack()
+entry2 = tk.Entry(janela)
+entry2.pack()
 
-def deletar():
-    listar()
-    i = int(input("Registro para deletar: "))
-    if i < 0 or i >= len(culturas):
-        print("Registro inválido")
-        return
+tk.Label(janela, text="Produto").pack()
+entry_produto = tk.Entry(janela)
+entry_produto.pack()
 
-    del culturas[i]
-    del areas[i]
-    del produtos[i]
-    del quantidades[i]
+tk.Label(janela, text="Quantidade por m²").pack()
+entry_qtd = tk.Entry(janela)
+entry_qtd.pack()
 
-while True:
-    print("\n1-Cadastrar  2-Listar  3-Atualizar  4-Deletar  5-Sair")
-    op = input("Opção: ")
+tk.Button(janela, text="Cadastrar", command=cadastrar).pack(pady=10)
 
-    if op == "1":
-        cadastrar()
-    elif op == "2":
-        listar()
-    elif op == "3":
-        atualizar()
-    elif op == "4":
-        deletar()
-    elif op == "5":
-        break
+texto = tk.Text(janela, width=70, height=15)
+texto.pack(pady=10)
+
+janela.mainloop()
