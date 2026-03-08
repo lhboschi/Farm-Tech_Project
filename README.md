@@ -1,7 +1,9 @@
 # FarmTech
 
-Projeto em Python para agricultura digital.
+Projeto em Python e R para agricultura digital.
 
-## Culturas
-- Milho
-- Café
+## Funcionalidades
+- Cadastro de culturas
+- Cálculo de área
+- Manejo de insumos
+- Estatística em R
