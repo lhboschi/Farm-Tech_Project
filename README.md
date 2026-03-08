@@ -1,3 +1,7 @@
 # FarmTech
 
-Projeto inicial em Python para cálculo agrícola.
+Projeto em Python para agricultura digital.
+
+## Culturas
+- Milho
+- Café
