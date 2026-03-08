@@ -42,11 +42,13 @@ def listar():
         return
 
     for i in range(len(culturas)):
+        total = areas[i] * quantidades[i]
         print(f"\nRegistro: {i}")
         print(f"Cultura: {culturas[i]}")
         print(f"Área: {areas[i]:.2f}")
         print(f"Produto: {produtos[i]}")
         print(f"Qtd por m²: {quantidades[i]:.2f}")
+        print(f"Total por área: {total:.2f}")
 
 def atualizar():
     listar()
