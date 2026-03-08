@@ -14,9 +14,7 @@ quantidades_m2 = []
 unidades_m2 = []
 ruas_lavoura = []
 litros_por_rua = []
-bases = []
-alturas = []
-raios = []
+
 # =========================
 # TEMAS
 # =========================
@@ -62,12 +60,10 @@ def calcular_area(cultura):
     if cultura == "Milho":
         base = float(entry_medida1.get())
         altura = float(entry_medida2.get())
-        area = base * altura
-        return area, base, altura, 0
+        return base * altura
     else:
         raio = float(entry_medida1.get())
-        area = math.pi * raio ** 2
-        return area, 0, 0, raio
+        return math.pi * raio ** 2
 
 
 def formatar_total_area(valor, unidade):
@@ -207,8 +203,7 @@ def listar():
 def cadastrar():
     try:
         cultura = cultura_var.get()
-        area, base, altura, raio = calcular_area(cultura)
-
+        area = calcular_area(cultura)
         produto = entry_produto.get().strip()
         qtd_m2 = float(entry_qtd_m2.get())
         unidade = unidade_var.get()
@@ -226,9 +221,6 @@ def cadastrar():
         unidades_m2.append(unidade)
         ruas_lavoura.append(ruas)
         litros_por_rua.append(litros)
-        bases.append(base)
-        alturas.append(altura)
-        raios.append(raio)
 
         limpar()
         listar()
@@ -246,8 +238,7 @@ def atualizar():
             return
 
         cultura = cultura_var.get()
-        area, base, altura, raio = calcular_area(cultura)
-
+        area = calcular_area(cultura)
         produto = entry_produto.get().strip()
         qtd_m2 = float(entry_qtd_m2.get())
         unidade = unidade_var.get()
@@ -265,9 +256,6 @@ def atualizar():
         unidades_m2[i] = unidade
         ruas_lavoura[i] = ruas
         litros_por_rua[i] = litros
-        bases[i] = base
-        alturas[i] = altura
-        raios[i] = raio
 
         limpar()
         listar()
@@ -291,15 +279,13 @@ def deletar():
         del unidades_m2[i]
         del ruas_lavoura[i]
         del litros_por_rua[i]
-        del bases[i]
-        del alturas[i]
-        del raios[i]
 
         limpar()
         listar()
         messagebox.showinfo("Sucesso", "Registro removido com sucesso.")
     except:
         messagebox.showerror("Erro", "Digite um registro válido.")
+
 
 def executar_r(arquivo, cidade=None):
     rscript = localizar_rscript()
@@ -434,45 +420,9 @@ def aplicar_tema(nome_tema):
 
     for botao in [
         botao_sair, botao_cadastrar, botao_listar, botao_atualizar,
-        botao_deletar, botao_info, botao_estatistica, botao_clima, botao_carregar
+        botao_deletar, botao_info, botao_estatistica, botao_clima
     ]:
         estilizar_botao(botao, cores)
-
-def carregar_registro():
-    try:
-        i = int(entry_registro.get())
-
-        if i < 0 or i >= len(culturas):
-            messagebox.showerror("Erro", "Registro inválido.")
-            return
-
-        cultura_var.set(culturas[i])
-
-        entry_medida1.delete(0, tk.END)
-        entry_medida2.delete(0, tk.END)
-        entry_produto.delete(0, tk.END)
-        entry_qtd_m2.delete(0, tk.END)
-        entry_ruas.delete(0, tk.END)
-        entry_litros_rua.delete(0, tk.END)
-
-        if culturas[i] == "Milho":
-            entry_medida1.insert(0, str(bases[i]))
-            entry_medida2.config(state="normal")
-            entry_medida2.insert(0, str(alturas[i]))
-        else:
-            entry_medida1.insert(0, str(raios[i]))
-            entry_medida2.delete(0, tk.END)
-            entry_medida2.config(state="disabled")
-
-        entry_produto.insert(0, produtos[i])
-        entry_qtd_m2.insert(0, str(quantidades_m2[i]))
-        unidade_var.set(unidades_m2[i])
-        entry_ruas.insert(0, str(ruas_lavoura[i]))
-        entry_litros_rua.insert(0, str(litros_por_rua[i]))
-
-        messagebox.showinfo("Sucesso", f"Registro {i} carregado para edição.")
-    except:
-        messagebox.showerror("Erro", "Digite um número de registro válido.")
 
 # =========================
 # INTERFACE
@@ -570,18 +520,14 @@ botao_cadastrar.grid(row=0, column=0, padx=6, pady=6)
 botao_listar = tk.Button(botoes, text="Listar", width=14, command=listar)
 botao_listar.grid(row=0, column=1, padx=6, pady=6)
 
-botao_carregar = tk.Button(botoes, text="Carregar", width=14, command=carregar_registro)
-botao_carregar.grid(row=0, column=2, padx=6, pady=6)
-
 botao_atualizar = tk.Button(botoes, text="Atualizar", width=14, command=atualizar)
-botao_atualizar.grid(row=0, column=3, padx=6, pady=6)
+botao_atualizar.grid(row=0, column=2, padx=6, pady=6)
 
 botao_deletar = tk.Button(botoes, text="Deletar", width=14, command=deletar)
-botao_deletar.grid(row=0, column=4, padx=6, pady=6)
+botao_deletar.grid(row=0, column=3, padx=6, pady=6)
 
 botao_info = tk.Button(botoes, text="Info", width=14, command=mostrar_info)
-botao_info.grid(row=0, column=5, padx=6, pady=6)
-
+botao_info.grid(row=0, column=4, padx=6, pady=6)
 
 botao_estatistica = tk.Button(
     janela,
