@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import os
 import subprocess
-
+import csv
 import dados
 from logica import calcular_area, formatar_total_area, localizar_rscript
 
@@ -51,6 +51,37 @@ class FarmTechApp:
         self.entry_litros_rua.delete(0, tk.END)
         self.entry_registro.delete(0, tk.END)
 
+    def salvar_csv(self):
+        with open("dados_farmtech.csv", "w", newline="", encoding="utf-8") as arquivo:
+            escritor = csv.writer(arquivo)
+
+            escritor.writerow([
+                "cultura",
+                "area",
+                "produto",
+                "quantidade_m2",
+                "unidade_m2",
+                "ruas_lavoura",
+                "litros_por_rua",
+                "base",
+                "altura",
+                "raio"
+            ])
+
+            for i in range(len(dados.culturas)):
+                escritor.writerow([
+                  dados.culturas[i],
+                  dados.areas[i],
+                  dados.produtos[i],
+                  dados.quantidades_m2[i],
+                  dados.unidades_m2[i],
+                  dados.ruas_lavoura[i],
+                  dados.litros_por_rua[i],
+                  dados.bases[i],
+                  dados.alturas[i],
+                  dados.raios[i]
+            ])
+                
     def atualizar_labels(self, *args):
         if self.cultura_var.get() == "Milho":
             self.label_medida1.config(text="Base (m)")
@@ -64,45 +95,63 @@ class FarmTechApp:
 
     def mostrar_info(self):
         mensagem = (
-            "SISTEMA FARMTECH - AGRICULTURA DIGITAL\n\n"
-            "Objetivo:\n"
-            "Sistema em Python e R para simular apoio à agricultura digital.\n\n"
+            "FarmTech - Instruções de uso\n\n"
 
-            "Culturas:\n"
-            "- Milho: área por retângulo\n"
-            "- Café: área por círculo\n\n"
+            "1. Escolha a cultura.\n"
+            "   - Milho: usa Base e Altura.\n"
+            "   - Café: usa apenas Raio.\n\n"
 
-            "Fórmulas:\n"
-            "- Milho = base × altura\n"
-            "- Café = pi × raio²\n\n"
+            "2. Preencha as medidas do terreno.\n"
+            "   - Milho: Área = Base × Altura\n"
+            "   - Café: Área = π × raio²\n\n"
 
-            "Dose por metro quadrado:\n"
-            "- mL/m²\n"
-            "- L/m²\n"
-            "- g/m²\n"
-            "- kg/m²\n\n"
+            "3. Digite o Produto/insumo.\n\n"
 
-            "Manejo de insumos:\n"
-            "1. Total por área = área × quantidade por m²\n"
-            "2. Total por ruas = ruas da lavoura × litros por rua\n\n"
+            "4. Informe a Quantidade por m² e escolha a unidade.\n"
+            "   Unidades disponíveis:\n"
+            "   - mL/m²\n"
+            "   - L/m²\n"
+            "   - g/m²\n"
+            "   - kg/m²\n\n"
 
-            "Como editar:\n"
-            "1. Digite o número no campo Registro\n"
-            "2. Clique em Carregar\n"
-            "3. Altere um ou vários campos\n"
-            "4. Clique em Atualizar\n\n"
+            "5. Informe as Ruas da lavoura e os Litros por rua.\n"
+            "   O sistema calcula:\n"
+            "   - Total por área = área × quantidade por m²\n"
+            "   - Total por ruas = ruas × litros por rua\n\n"
 
-            "Integração com R:\n"
-            "- estatistica.R: média e desvio padrão\n"
-            "- clima.R: clima atual por cidade com Open-Meteo\n\n"
+            "6. Clique em Cadastrar para salvar um novo registro.\n"
+            "7. Clique em Listar para visualizar os registros cadastrados.\n\n"
 
-            "Temas disponíveis:\n"
-            "- Azul\n"
-            "- Verde\n"
-            "- Preto"
+            "8. Para editar um registro:\n"
+            "   - Digite o número no campo Registro\n"
+            "   - Clique em Carregar\n"
+            "   - Altere um ou mais campos\n"
+            "   - Clique em Atualizar\n\n"
+
+            "9. Para excluir, digite o número no campo Registro e clique em Deletar.\n\n"
+
+            "10. Para consultar o clima:\n"
+            "    - Digite uma cidade no campo Cidade do clima\n"
+            "    - Clique em Buscar clima em R\n\n"
+
+            "11. Para análise estatística:\n"
+            "    - Clique em Estatística em R\n"
+            "    - O sistema usa os dados reais cadastrados no arquivo CSV\n"
+            "    - Mostra quantidade de registros, média, desvio padrão,\n"
+            "      menor área e maior área\n\n"
+
+            "12. Temas visuais disponíveis:\n"
+            "    - Azul\n"
+            "    - Verde\n"
+            "    - Preto\n\n"
+
+            "Observações:\n"
+            " - O campo Registro começa em 0.\n"
+            " - Exemplo: primeiro registro = 0, segundo = 1.\n"
+            " - Se existir apenas 1 registro, o desvio padrão não é calculado.\n"
         )
         messagebox.showinfo("Informações do Sistema", mensagem)
-
+    
     def listar(self):
         self.texto.delete("1.0", tk.END)
 
@@ -163,6 +212,7 @@ class FarmTechApp:
 
             self.limpar()
             self.listar()
+            self.salvar_csv()
             messagebox.showinfo("Sucesso", "Registro cadastrado com sucesso.")
         except:
             messagebox.showerror("Erro", "Preencha todos os campos corretamente.")
@@ -241,6 +291,7 @@ class FarmTechApp:
 
             self.limpar()
             self.listar()
+            self.salvar_csv()
             messagebox.showinfo("Sucesso", "Registro atualizado com sucesso.")
         except:
             messagebox.showerror("Erro", "Confira o número do registro e os dados.")
@@ -266,6 +317,7 @@ class FarmTechApp:
 
             self.limpar()
             self.listar()
+            self.salvar_csv()
             messagebox.showinfo("Sucesso", "Registro removido com sucesso.")
         except:
             messagebox.showerror("Erro", "Digite um registro válido.")
