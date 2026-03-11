@@ -465,10 +465,14 @@ class FarmTechApp:
 
         self.botao_sair = tk.Button(self.barra_topo, text="Sair", width=10, command=self.janela.destroy)
         self.botao_sair.pack(side="left", padx=5)
+        
+        self.botao_info = tk.Button(self.barra_topo, text="Info", width=10, command=self.mostrar_info)
+        self.botao_info.pack(side="right", padx=5)
 
         self.tema_var = tk.StringVar(value="Azul")
         self.menu_tema = tk.OptionMenu(self.barra_topo, self.tema_var, "Azul", "Verde", "Preto", command=self.aplicar_tema)
-        self.menu_tema.pack(side="left", padx=5)
+        self.menu_tema.pack(side="right", padx=5)
+
 
         self.titulo = tk.Label(self.janela, text="FarmTech - Agricultura Digital", font=("Arial", 18, "bold"))
         self.titulo.pack(pady=10)
@@ -557,9 +561,6 @@ class FarmTechApp:
 
         self.botao_deletar = tk.Button(self.botoes, text="Deletar", width=14, command=self.deletar)
         self.botao_deletar.grid(row=0, column=4, padx=6, pady=6)
-
-        self.botao_info = tk.Button(self.botoes, text="Info", width=14, command=self.mostrar_info)
-        self.botao_info.grid(row=0, column=5, padx=6, pady=6)
 
         self.botao_estatistica = tk.Button(
             self.janela,
